@@ -13,7 +13,7 @@ namespace myAllocator
 	// 空间的分配，可以存储 size 个 T 对象
 	template <class T>
 	inline T* _allocate(ptrdiff_t size, T*) {
-		std::set_new_handler(0);  // 分配失败，抛出std::bad_alloc
+		//std::set_new_handler(0);  // 分配失败，抛出std::bad_alloc
 
 	    // 空间的分配实现，调用 ::operator new() 全局函数
 		T* tmp = (T*)(::operator new((size_t)(size * sizeof(T))));
@@ -22,6 +22,7 @@ namespace myAllocator
 			std::cerr << "out of memory" << std::endl;
 			exit(1);
 		}
+		printf("_allocate %d\n", size);
 
 		return tmp;
 	}
@@ -72,29 +73,35 @@ namespace myAllocator
 		}
 
 		void deallocate(pointer p, size_type n) {
+			printf("deallocate  %d\n",n);
 			_deallocate(p);
 		}
 
 		void construct(pointer p, const T& value) {
+			printf("construct,  \n");
 			_construct(p, value);
 		}
 
 		void destroy(pointer p) {
+			printf("destroy,  \n");
 			_destroy(p);
 		}
 
 		// 返回某个对象的地址
 		pointer address(reference x) {
+			printf("address,  \n");
 			return (pointer)&x;
 		}
 
 		// 返回某个 const 对象的地址
 		const_pointer const_address(const_reference x) {
+			printf("const_address,  \n");
 			return (const_pointer)&x;
 		}
 		
 		// 返回可成功分配的最大量  
 		size_type max_size() const {  
+			printf("max_size,  \n");
 			return size_type(UINT_MAX/sizeof(T)); // UINT_MAX 是 unsigned long 及 unsigned long long 的最大值
 		}
 	};
